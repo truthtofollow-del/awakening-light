@@ -1,0 +1,40 @@
+# 🕯️ Awakening Light
+
+**Awakening Light** is a high-fidelity digital sanctuary designed to help users reclaim their attention and build discipline through intentional community. It moves away from "scrolling" and toward **sovereignty**.
+
+---
+
+## 🏛️ The Four Pillars
+
+### 1. The Sanctuary (The Heart)
+* **Purpose**: A focused dashboard for the user’s daily ritual.
+* **The Void**: A 30-minute deep-work timer with a high-end glass-morphism overlay.
+* **Adaptive UI**: The interface shifts its tone and aesthetic based on the time of day (Morning/Afternoon/Evening).
+
+### 2. Sovereignty Circles (The Community)
+* **Purpose**: Intention-based micro-communities that replace traditional social feeds.
+* **Live Feed**: A real-time stream of "Sovereignty Pledges" where members support each other's discipline.
+* **Unity Pulse**: A visual indicator showing real-time global activity within the ecosystem.
+
+### 3. The Royal Profile (The Record)
+* **Purpose**: A long-term record of user growth and consistency.
+* **Metrics**: Tracks deep-work streaks, completed pledges, and earned "Royal Seals."
+
+### 4. The Coronation Gate (The Entry)
+* **The Pledge**: Before entry, users sign a "Unity Pledge"—a contract-style commitment to their focus.
+* **The Ritual**: A 3-second "press-and-hold" confirmation that unlocks the app experience.
+
+---
+
+## 🛠️ Technical Architecture
+* **Frontend**: React (v18.2.0) + Vite
+* **Styling**: Tailwind CSS (Stone & Glass Aesthetic)
+* **State & Motion**: Zustand + Framer Motion
+* **Infrastructure**: Vercel
+
+---
+
+## 📈 Current Status
+* [x] Core Infrastructure Repaired
+* [x] Technical Architecture Defined
+* [ ] Starter Scaffold Deployment (In Progress)
