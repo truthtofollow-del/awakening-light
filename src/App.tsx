@@ -1,28 +1,48 @@
-import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Landing from './pages/Landing';
+import CoronationGate from './pages/CoronationGate';
+import Home from './pages/Home';
+import Circles from './pages/Circles';
 import TheSanctuary from './components/TheSanctuary';
-import TheNavBar from './components/TheNavBar';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
-  // Sets 'sanctuary' as the starting screen
-  const [currentTab, setCurrentTab] = useState('sanctuary');
-
   return (
-    <div className="min-h-screen bg-stone-50 font-sans">
-      
-      {/* Dynamic Content: Changes based on the Nav Bar */}
-      <main className="pb-24"> 
-        {currentTab === 'sanctuary' && <TheSanctuary />}
-        {currentTab === 'circles' && (
-          <div className="flex items-center justify-center min-h-screen">
-            <p className="text-stone-400 italic">The Circles are forming...</p>
-          </div>
-        )}
-      </main>
-
-      {/* Navigation Bar */}
-      <TheNavBar currentTab={currentTab} setCurrentTab={setCurrentTab} />
-      
-    </div>
+    <Router>
+      <Routes>
+        {/* Root path routes to Landing page */}
+        <Route path="/" element={<Landing />} />
+        
+        {/* CoronationGate onboarding at /gate */}
+        <Route path="/gate" element={<CoronationGate />} />
+        
+        {/* Main app routes */}
+        <Route
+          path="/home"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/sanctuary"
+          element={
+            <ProtectedRoute>
+              <TheSanctuary />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/circles"
+          element={
+            <ProtectedRoute>
+              <Circles />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </Router>
   );
 }
 
