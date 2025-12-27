@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { track } from '@vercel/analytics';
 
 // UnityPulse animation component using Framer Motion
 const UnityPulse: React.FC = () => {
@@ -110,6 +111,13 @@ const PressHoldCTA: React.FC = () => {
   };
 
   const handleSubmit = (): void => {
+    // Track the Coronation Complete event as primary conversion metric
+    track('Coronation Complete', {
+      email: email,
+      timestamp: new Date().toISOString(),
+      holdDuration: HOLD_DURATION,
+    });
+    
     // In a real implementation, this would send the email to a backend
     console.log('Waitlist email submitted:', email);
     setSubmitted(true);

@@ -1,14 +1,33 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { track } from '@vercel/analytics';
+import { useSession } from '../contexts/SessionContext';
 
 // CoronationGate - Onboarding flow
 const CoronationGate: React.FC = () => {
   const navigate = useNavigate();
+  const { startSession } = useSession();
   const [step, setStep] = useState<number>(1);
   const [intention, setIntention] = useState<string>('');
 
   const handleComplete = (): void => {
+    // Create a user session when completing the gate
+    const user = {
+      id: `user_${Date.now()}`,
+      name: 'Seeker', // Could be collected in a more detailed onboarding
+    };
+    
+    // Track the Gate Completion event
+    track('Gate Completed', {
+      userId: user.id,
+      intention: intention.substring(0, 100), // First 100 chars for privacy
+      timestamp: new Date().toISOString(),
+    });
+    
+    // Start the user session
+    startSession(user);
+    
     // Navigate to home after completing the gate
     navigate('/home');
   };
