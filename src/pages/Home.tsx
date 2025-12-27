@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import TheSanctuary from '../components/TheSanctuary';
 import TheNavBar from '../components/TheNavBar';
+import { track } from '@vercel/analytics';
 import { useSession } from '../contexts/SessionContext';
 
 const Home: React.FC = () => {
@@ -20,6 +21,18 @@ const Home: React.FC = () => {
     return `${secs}s`;
   };
 
+  const handleEndSession = (): void => {
+    // Track session end with duration
+    track('Session Ended', {
+      userId: user?.id,
+      sessionDuration: sessionDuration,
+      sessionDurationFormatted: formatDuration(sessionDuration),
+      timestamp: new Date().toISOString(),
+    });
+    
+    endSession();
+  };
+
   return (
     <div className="min-h-screen bg-stone-50 font-sans">
       {/* Session info bar */}
@@ -33,7 +46,7 @@ const Home: React.FC = () => {
           </span>
         </div>
         <button
-          onClick={endSession}
+          onClick={handleEndSession}
           className="text-sm px-4 py-1 bg-stone-800 hover:bg-stone-700 rounded transition-colors"
         >
           End Session

@@ -20,7 +20,6 @@ interface SessionState {
 interface SessionContextType extends SessionState {
   startSession: (user: User) => void;
   endSession: () => void;
-  updateSessionDuration: () => number;
 }
 
 // Create the context
@@ -47,13 +46,22 @@ export const SessionProvider: React.FC<SessionProviderProps> = ({ children }) =>
     if (stored) {
       try {
         const parsed = JSON.parse(stored);
-        // Validate that session is still valid (less than 24 hours old)
-        const hoursSinceStart = (Date.now() - parsed.sessionStartTime) / (1000 * 60 * 60);
-        if (hoursSinceStart < 24) {
-          return {
-            ...parsed,
-            sessionDuration: Math.floor((Date.now() - parsed.sessionStartTime) / 1000),
-          };
+        // Validate parsed data structure
+        if (
+          parsed &&
+          typeof parsed === 'object' &&
+          typeof parsed.sessionStartTime === 'number' &&
+          typeof parsed.sessionId === 'string' &&
+          typeof parsed.isAuthenticated === 'boolean'
+        ) {
+          // Validate that session is still valid (less than 24 hours old)
+          const hoursSinceStart = (Date.now() - parsed.sessionStartTime) / (1000 * 60 * 60);
+          if (hoursSinceStart < 24) {
+            return {
+              ...parsed,
+              sessionDuration: Math.floor((Date.now() - parsed.sessionStartTime) / 1000),
+            };
+          }
         }
       } catch (error) {
         console.error('Failed to restore session:', error);
@@ -73,16 +81,14 @@ export const SessionProvider: React.FC<SessionProviderProps> = ({ children }) =>
   // Update session duration every second
   useEffect(() => {
     const interval = setInterval(() => {
-      if (sessionState.isAuthenticated || sessionState.sessionStartTime) {
-        setSessionState((prev) => ({
-          ...prev,
-          sessionDuration: Math.floor((Date.now() - prev.sessionStartTime) / 1000),
-        }));
-      }
+      setSessionState((prev) => ({
+        ...prev,
+        sessionDuration: Math.floor((Date.now() - prev.sessionStartTime) / 1000),
+      }));
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [sessionState.isAuthenticated, sessionState.sessionStartTime]);
+  }, []); // Empty dependency array - interval uses prev state
 
   // Persist session to localStorage whenever it changes
   useEffect(() => {
@@ -116,21 +122,10 @@ export const SessionProvider: React.FC<SessionProviderProps> = ({ children }) =>
     localStorage.removeItem(SESSION_STORAGE_KEY);
   };
 
-  // Manually update and return current session duration
-  const updateSessionDuration = (): number => {
-    const duration = Math.floor((Date.now() - sessionState.sessionStartTime) / 1000);
-    setSessionState((prev) => ({
-      ...prev,
-      sessionDuration: duration,
-    }));
-    return duration;
-  };
-
   const contextValue: SessionContextType = {
     ...sessionState,
     startSession,
     endSession,
-    updateSessionDuration,
   };
 
   return (
