@@ -1,17 +1,18 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
+import { useSession } from '../contexts/SessionContext';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
-// Simple placeholder for protected route - in a real app, this would check authentication
+// Protected route component - checks authentication via session context
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  // For now, we'll assume the user is always authenticated
-  const isAuthenticated = true;
+  const { isAuthenticated } = useSession();
 
   if (!isAuthenticated) {
-    return <Navigate to="/" replace />;
+    // Redirect to the gate if not authenticated
+    return <Navigate to="/gate" replace />;
   }
 
   return <>{children}</>;
